@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #635f5f6c;
+    background-color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,7 +11,7 @@ body {
 
 .game-container {
     text-align: center;
-    background: #0a123d59;
+    background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -116,4 +116,33 @@ body {
     font-weight: bold;
     color: #23ab0c;
     margin-top: 10px;
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.scoreboard p {
+    margin: 0;
+}
+
+.mode-selection button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #ffffff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mode-selection button:hover {
+    background-color: #218838;
 }

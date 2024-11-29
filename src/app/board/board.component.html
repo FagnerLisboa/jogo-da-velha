@@ -1,17 +1,34 @@
 <div class="game-container">
   <h1>Jogo da Velha</h1>
+
+  <!-- Placar -->
+  <div class="scoreboard">
+    <p>Você: {{ game.score.player }}</p>
+    <p>Bot: {{ game.score.bot }}</p>
+  </div>
+
+  <!-- Tabuleiro -->
   <div class="board">
     <div *ngFor="let row of game.board; let rowIndex = index" class="board-row">
-      <div *ngFor="let cell of row; let colIndex = index" class="cell" (click)="handleMove(rowIndex, colIndex)"
-        [ngClass]="getCellClasses(rowIndex, colIndex)">
+      <div
+        *ngFor="let cell of row; let colIndex = index"
+        class="cell"
+        (click)="handleMove(rowIndex, colIndex)"
+        [ngClass]="{ 'winning-cell': isWinningCell(rowIndex, colIndex) }"
+      >
         {{ cell }}
       </div>
     </div>
   </div>
 
+  <!-- Mensagem de vitória -->
   <div *ngIf="game.winner" class="winner">
-    {{ game.winner }} venceu!
+    {{ game.winner === 'X' ? 'Você venceu!' : 'O bot venceu!' }}
   </div>
 
-  <button class="reset-btn" (click)="reset()">Reiniciar Jogo</button>
+  <!-- Botões -->
+  <div class="mode-selection">
+    <button (click)="reset(false)">2 Jogadores</button>
+    <button (click)="reset(true)">Contra o Bot</button>
+  </div>
 </div>
