@@ -1,1 +1,0 @@
-.board{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);width:300px;height:300px;margin:20px auto;background-image:url(tic-tac-toe.97b2560056608ba0.png);background-size:cover;background-position:center;position:relative}
