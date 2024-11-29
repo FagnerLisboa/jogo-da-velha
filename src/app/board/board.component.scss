@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.game-container {
+  text-align: center;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 450px;
+  width: 100%;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
+  background-image: url('/assets/tic-tac-toe.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+  font-weight: bold;
+  color: #020d70;
+  cursor: pointer;
+  width: 100%;
+  height: 100px;
+  box-sizing: border-box;
+}
+
+.cell {
+  pointer-events: auto;
+}
+
+.winning-cell {
+  position: relative;
+}
+
+.winning-cell::after {
+  content: '';
+  position: absolute;
+  background-color: #08a502;
+}
+
+.winning-cell.horizontal::after {
+  top: 50%;
+  left: 0;
+  width: 100%; /* Linha horizontal ocupa 100% da largura */
+  transform: rotate(-90deg);
+}
+
+.winning-cell.vertical::after {
+  top: 0;
+  left: 50%;
+  height: 100%; /* Linha vertical ocupa 100% da altura */
+  width: 5px;
+  transform: rotate(-90deg)
+}
+
+.winning-cell.diagonal-left::after {
+  top: 0;
+  left: 5px;
+  width: 135%;
+  height: 5px;
+  transform: rotate(45deg);
+  transform-origin: top left;
+}
+
+.winning-cell.diagonal-right::after {
+  top: 0;
+  left: -48px;
+  width: 145%;
+  height: 5px;
+  transform: rotate(-45deg);
+  transform-origin: top right;
+}
+
+.reset-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reset-btn:hover {
+  background-color: #0056b3;
+}
+
+.winner {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333333;
+  margin-top: 10px;
+}
