@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CellComponent } from './cell.component';
+import { BotComponent } from './bot.component';
 
-describe('CellComponent', () => {
-  let component: CellComponent;
-  let fixture: ComponentFixture<CellComponent>;
+describe('BotComponent', () => {
+  let component: BotComponent;
+  let fixture: ComponentFixture<BotComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CellComponent ]
+      declarations: [ BotComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CellComponent);
+    fixture = TestBed.createComponent(BotComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

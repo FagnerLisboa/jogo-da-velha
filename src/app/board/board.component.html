@@ -1,34 +1,42 @@
+<div class="mode-selection">
+  <button (click)="selectGameMode('player')" [class.active]="gameMode === 'player'">
+    2 Jogadores
+  </button>
+  <button (click)="selectGameMode('bot')" [class.active]="gameMode === 'bot'">
+    Contra o Bot
+  </button>
+</div>
+
 <div class="game-container">
-  <h1>Jogo da Velha</h1>
-
-  <!-- Placar -->
-  <div class="scoreboard">
-    <p>Você: {{ game.score.player }}</p>
-    <p>Bot: {{ game.score.bot }}</p>
-  </div>
-
-  <!-- Tabuleiro -->
+  <h1 class="title">Jogo da Velha</h1>
   <div class="board">
     <div *ngFor="let row of game.board; let rowIndex = index" class="board-row">
       <div
         *ngFor="let cell of row; let colIndex = index"
         class="cell"
         (click)="handleMove(rowIndex, colIndex)"
-        [ngClass]="{ 'winning-cell': isWinningCell(rowIndex, colIndex) }"
+        [ngClass]="getCellClasses(rowIndex, colIndex)"
       >
         {{ cell }}
       </div>
     </div>
   </div>
 
-  <!-- Mensagem de vitória -->
-  <div *ngIf="game.winner" class="winner">
-    {{ game.winner === 'X' ? 'Você venceu!' : 'O bot venceu!' }}
+  <app-bot
+    *ngIf="gameMode === 'bot'"
+    [gameBoard]="game.board"
+    [currentPlayer]="game.currentPlayer"
+    (botMove)="handleBotMove($event)"
+  ></app-bot>
+
+  <div *ngIf="game.winner || isDraw" class="winner">
+    <ng-container *ngIf="game.winner; else drawMessage">
+      {{ game.winner }} venceu!
+    </ng-container>
+    <ng-template #drawMessage>
+      Deu Velha!
+    </ng-template>
   </div>
 
-  <!-- Botões -->
-  <div class="mode-selection">
-    <button (click)="reset(false)">2 Jogadores</button>
-    <button (click)="reset(true)">Contra o Bot</button>
-  </div>
+  <button class="reset-btn" (click)="reset()">Reiniciar Jogo</button>
 </div>
