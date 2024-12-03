@@ -169,7 +169,7 @@ export class BoardComponent implements OnInit {
   handleWin(winner: string): void {
     if (winner === 'X' || winner === 'O') {
       this.scores[winner]++;
-    } else if (winner === 'draw') {
+    } else if (this.isDraw) {
       this.scores.draws++;
     }
   }

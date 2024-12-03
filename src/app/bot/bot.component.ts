@@ -13,135 +13,127 @@ export class BotComponent implements OnInit {
 
   isThinking = false;
 
-  constructor(
-    private ticTacToeService: TicTacToeService
-  ) { }
+  constructor(private ticTacToeService: TicTacToeService) {}
 
-  public generateGameData(): string {
-    const rows = this.gameBoard.map((row, i) =>
-      row.map((cell, j) => `${i}-${j}=${cell || ''}`).join('&')
-    );
-    return `player=${this.currentPlayer}&${rows.join('&')}`;
-  }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   requestBotMove(data: { player: string; board: string[][] }): void {
     this.isThinking = true;
+
+    // Capturar estado atual para evitar conflitos durante jogadas assíncronas
+    const boardSnapshot = JSON.parse(JSON.stringify(data.board));
+
     setTimeout(() => {
       this.ticTacToeService.getNextMove(data).subscribe(
         (response) => {
           this.isThinking = false;
-          this.botMove.emit(response);
+          // Garantir que a jogada emitida corresponde ao estado mais recente
+          if (this.isBoardUnchanged(boardSnapshot, this.gameBoard)) {
+            this.botMove.emit(response);
+          }
         },
         (error) => {
           this.isThinking = false;
           console.error('Erro ao obter jogada do bot. Usando fallback:', error);
-          const fallbackMove = this.fallbackMove(data.board);
+          const fallbackMove = this.fallbackMove(this.gameBoard);
           this.botMove.emit(fallbackMove);
         }
       );
     }, 500); // Simular um tempo de "pensamento"
   }
-  
+
 
   private findWinningMove(board: string[][], player: string): { x: number; y: number } | null {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (!board[i][j]) { // Verificar apenas células vazias
-          // Simular a jogada
-          board[i][j] = player;
-
-          // Verificar se esta jogada resulta em vitória
+        if (!board[i][j]) {
+          board[i][j] = player; // Simular jogada
           if (this.isWinningMove(board, player)) {
-            board[i][j] = ''; // Reverter a simulação
+            board[i][j] = ''; // Reverter simulação
             return { x: i, y: j };
           }
-
-          // Reverter a simulação
-          board[i][j] = '';
+          board[i][j] = ''; // Reverter simulação
         }
       }
     }
-    return null; // Nenhuma jogada vencedora encontrada
+    return null;
   }
 
   private isWinningMove(board: string[][], player: string): boolean {
-    // Verificar linhas
-    for (let i = 0; i < 3; i++) {
-      if (board[i][0] === player && board[i][1] === player && board[i][2] === player) {
-        return true;
-      }
-    }
-
-    // Verificar colunas
-    for (let j = 0; j < 3; j++) {
-      if (board[0][j] === player && board[1][j] === player && board[2][j] === player) {
-        return true;
-      }
-    }
-
-    // Verificar diagonais
-    if (board[0][0] === player && board[1][1] === player && board[2][2] === player) {
-      return true;
-    }
-    if (board[0][2] === player && board[1][1] === player && board[2][0] === player) {
-      return true;
-    }
-
-    return false;
+    // Verificar linhas, colunas e diagonais
+    return (
+      [0, 1, 2].some((i) =>
+        // Verificar linhas e colunas
+        (board[i][0] === player && board[i][1] === player && board[i][2] === player) ||
+        (board[0][i] === player && board[1][i] === player && board[2][i] === player)
+      ) ||
+      // Verificar diagonais
+      (board[0][0] === player && board[1][1] === player && board[2][2] === player) ||
+      (board[0][2] === player && board[1][1] === player && board[2][0] === player)
+    );
   }
 
   private fallbackMove(board: string[][]): { x: number; y: number } {
-    // 1. Verificar se o bot pode ganhar
-    const winningMove = this.findWinningMove(board, this.currentPlayer);
-    if (winningMove) {
-      return winningMove;
-    }
+    const currentPlayer = this.currentPlayer;
+    const opponent = currentPlayer === 'X' ? 'O' : 'X';
   
-    // 2. Verificar se o bot precisa bloquear o adversário
-    const blockingMove = this.findWinningMove(board, this.currentPlayer === 'X' ? 'O' : 'X');
-    if (blockingMove) {
-      return blockingMove;
-    }
+    // 1. Verificar vitória ou bloqueio
+    const move =
+      this.findWinningMove(board, currentPlayer) ||
+      this.findWinningMove(board, opponent) ||
   
-    // 3. Tentar ocupar o centro
-    if (!board[1][1]) {
-      return { x: 1, y: 1 };
-    }
+      // 2. Priorizar centro
+      (board[0][1] === '' ? { x: 0, y: 1 } : null) ||
+      (board[1][1] === '' ? { x: 1, y: 1 } : null) ||
+      (board[0][2] === '' ? { x: 0, y: 2 } : null) ||
   
-    // 4. Tentar ocupar um canto disponível
-    const corners = [
-      { x: 0, y: 0 }, { x: 0, y: 2 },
-      { x: 2, y: 0 }, { x: 2, y: 2 }
-    ];
-    for (const corner of corners) {
-      if (!board[corner.x][corner.y]) {
-        return corner;
+      // 3. Priorizar cantos
+      this.getFirstAvailableCell(board, [
+        { x: 0, y: 0 }, { x: 0, y: 2 },
+        { x: 2, y: 0 }, { x: 2, y: 2 }
+      ]) ||
+  
+      // 4. Priorizar bordas
+      this.getFirstAvailableCell(board, [
+        { x: 0, y: 1 }, { x: 1, y: 0 },
+        { x: 1, y: 2 }, { x: 2, y: 1 }
+      ]);
+  
+    // 5. Último recurso
+    return move || this.getFirstAvailableCell(board, [])!;
+  }
+  
+  private checkWinner(board: string[][]): string | null {
+    for (let i = 0; i < 3; i++) {
+      if (board[i][0] && board[i][0] === board[i][1] && board[i][1] === board[i][2]) return board[i][0];
+      if (board[0][i] && board[0][i] === board[1][i] && board[1][i] === board[2][i]) return board[0][i];
+    }
+    if (board[0][0] && board[0][0] === board[1][1] && board[1][1] === board[2][2]) return board[0][0];
+    if (board[0][2] && board[0][2] === board[1][1] && board[1][1] === board[2][0]) return board[0][2];
+
+    if (board.flat().every(cell => cell)) return 'tie';
+    return null;
+  }
+  
+  private getFirstAvailableCell(
+    board: string[][],
+    cells: { x: number; y: number }[] = []
+  ): { x: number; y: number } | null {
+    if (cells.length > 0) {
+      for (const cell of cells) {
+        if (!board[cell.x][cell.y]) return cell;
       }
-    }
-  
-    // 5. Tentar ocupar uma borda disponível
-    const edges = [
-      { x: 0, y: 1 }, { x: 1, y: 0 },
-      { x: 1, y: 2 }, { x: 2, y: 1 }
-    ];
-    for (const edge of edges) {
-      if (!board[edge.x][edge.y]) {
-        return edge;
-      }
-    }
-  
-    // 6. Escolher qualquer célula vazia como último recurso
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        if (!board[i][j]) {
-          return { x: i, y: j };
+    } else {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (!board[i][j]) return { x: i, y: j };
         }
       }
     }
-  
-    return { x: 0, y: 0 }; // Caso todas as células estejam preenchidas.
+    return null;
   }
-}  
+
+  private isBoardUnchanged(board1: string[][], board2: string[][]): boolean {
+    return JSON.stringify(board1) === JSON.stringify(board2);
+  }
+}
