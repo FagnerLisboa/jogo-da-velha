@@ -13,6 +13,12 @@ export class BoardComponent implements OnInit {
   gameMode: 'bot' | 'player' = 'player';
   playAgainstBot: boolean = false;
 
+  scores = {
+    X: 0,
+    O: 0,
+    draws: 0,
+  };
+
   @ViewChild(BotComponent) bot!: BotComponent;
   isDraw: boolean = false
   isThinking = false;
@@ -77,6 +83,7 @@ export class BoardComponent implements OnInit {
       this.game.winner = this.game.currentPlayer;
     } else if (this.game.board.flat().every(cell => cell !== '')) {
       this.isDraw = true;
+      this.handleWin('draw');
       return;
     }
 
@@ -89,9 +96,6 @@ export class BoardComponent implements OnInit {
     // No modo contra o bot
     if (this.gameMode === 'bot' && this.game.currentPlayer === 'X') {
       this.game.currentPlayer = 'O'; // Passar para o bot
-
-
-      // setTimeout(() => this.bot.requestBotMove(), 500);
 
       setTimeout(() => {
         this.bot.requestBotMove({
@@ -117,6 +121,7 @@ export class BoardComponent implements OnInit {
           [{ x: row, y: 0 }, { x: row, y: 1 }, { x: row, y: 2 }],
           'horizontal'
         );
+        this.handleWin(this.game.currentPlayer);
         return true;
       }
     }
@@ -128,6 +133,7 @@ export class BoardComponent implements OnInit {
           [{ x: 0, y: col }, { x: 1, y: col }, { x: 2, y: col }],
           'vertical'
         );
+        this.handleWin(this.game.currentPlayer);
         return true;
       }
     }
@@ -138,6 +144,7 @@ export class BoardComponent implements OnInit {
         [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 }],
         'diagonal-left'
       );
+      this.handleWin(this.game.currentPlayer);
       return true;
     }
 
@@ -147,6 +154,7 @@ export class BoardComponent implements OnInit {
         [{ x: 0, y: 2 }, { x: 1, y: 1 }, { x: 2, y: 0 }],
         'diagonal-right'
       );
+      this.handleWin(this.game.currentPlayer);
       return true;
     }
 
@@ -156,6 +164,14 @@ export class BoardComponent implements OnInit {
   // Método para verificar se uma célula é parte da combinação vencedora
   isWinningCell(x: number, y: number): boolean {
     return this.game.winningCells.some(cell => cell.x === x && cell.y === y);
+  }
+
+  handleWin(winner: string): void {
+    if (winner === 'X' || winner === 'O') {
+      this.scores[winner]++;
+    } else if (winner === 'draw') {
+      this.scores.draws++;
+    }
   }
 
   reset(): void {

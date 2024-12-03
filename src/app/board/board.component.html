@@ -1,3 +1,9 @@
+<div class="scoreboard">
+  <p>Player: {{ scores.X }}</p>
+  <p>BOT: {{ scores.O }}</p>
+  <p>Empates: {{ scores.draws }}</p>
+</div>
+
 <div class="mode-selection">
   <button (click)="selectGameMode('player')" [class.active]="gameMode === 'player'">
     2 Jogadores
