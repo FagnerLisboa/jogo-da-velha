@@ -1,27 +1,30 @@
-# JogoDaVelha
+# Jogo da Velha com Bot Inteligente
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.11.
+Este projeto é uma implementação de um **Jogo da Velha (Tic-Tac-Toe)**, onde você pode desafiar um bot inteligente que utiliza estratégias bem definidas para decidir suas jogadas. Simples, intuitivo e divertido!
 
-## Development server
+## 🛠️ Tecnologias Utilizadas
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Angular**: Para construção da interface.
+- **TypeScript**: Linguagem de desenvolvimento.
+- **SCSS**: Para estilização e design responsivo.
+- **RxJS**: Gerenciamento de assincronismo no Angular.
 
-## Code scaffolding
+🎮 **Regras do Jogo**
+O tabuleiro é uma grade 3x3.
+Dois jogadores alternam turnos para marcar um espaço vazio.
+O objetivo é alinhar 3 símbolos (horizontal, vertical ou diagonal).
+Se nenhum jogador vencer e não houver mais espaços, o jogo termina empatado.
+🤖 Estratégias do Bot
+O bot foi desenvolvido para seguir estas etapas lógicas:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Priorizar vitória: O bot tentará vencer sempre que possível.
+Bloquear o adversário: Ele identificará e bloqueará jogadas que levariam o jogador a vencer.
+Escolher posições estratégicas: O bot dá preferência ao centro, seguido por cantos e bordas.
+Movimento final: Caso não haja opções estratégicas, ele seleciona o próximo espaço vazio.
+Nota: O algoritmo Minimax foi deliberadamente omitido para simplificar a lógica do bot, tornando o jogo mais acessível e divertido.
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+📈 **Melhorias Futuras**
+Adicionar níveis de dificuldade.
+Incluir animações e efeitos visuais mais sofisticados.
+Disponibilizar suporte a dispositivos móveis (design responsivo).
+Modo multiplayer online.
