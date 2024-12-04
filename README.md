@@ -1,5 +1,8 @@
 # Jogo da Velha com Bot Inteligente
 
+[Acesse o Jogo da Velha](https://fagnerlisboa.github.io/jogo-da-velha/)
+
+
 Este projeto é uma implementação de um **Jogo da Velha (Tic-Tac-Toe)**, onde você pode desafiar um bot inteligente que utiliza estratégias bem definidas para decidir suas jogadas. Simples, intuitivo e divertido!
 
 ## 🛠️ Tecnologias Utilizadas
@@ -28,3 +31,9 @@ Adicionar níveis de dificuldade.
 Incluir animações e efeitos visuais mais sofisticados.
 Disponibilizar suporte a dispositivos móveis (design responsivo).
 Modo multiplayer online.
+
+![Tela do Jogo da Velha](src/assets/Tic-Tac-Toe2.png.png)
+
+[![Tela do Jogo da Velha](assets/Tic-Tac-Toe2.png.png)](https://fagnerlisboa.github.io/jogo-da-velha/)
+
+
