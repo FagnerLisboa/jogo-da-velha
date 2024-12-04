@@ -32,8 +32,6 @@ Incluir animações e efeitos visuais mais sofisticados.
 Disponibilizar suporte a dispositivos móveis (design responsivo).
 Modo multiplayer online.
 
-![Tela do Jogo da Velha](src/assets/Tic-Tac-Toe2.png.png)
-
-[![Tela do Jogo da Velha](assets/Tic-Tac-Toe2.png.png)](https://fagnerlisboa.github.io/jogo-da-velha/)
+[![Tela do Jogo da Velha](src/assets/Tic-Tac-Toe2.png.png)](https://fagnerlisboa.github.io/jogo-da-velha/)
 
 
